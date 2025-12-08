@@ -1,1 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PAY54 • Smart Wallet Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description"
+        content="PAY54 Smart Wallet dashboard. Hybrid NGN + FX wallet with FX, bills, cards, savings and more." />
+  <meta name="theme-color" content="#020617" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; frame-ancestors 'self';" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/pay54-icon.svg" />
+  <link rel="stylesheet" href="assets/css/global.css" />
+  <link rel="stylesheet" href="assets/css/dashboard.css" />
+</head>
+<body class="dash-body">
+  <div class="dash-shell">
+    <div class="dash-banner">
+      <span>PAY54 DEMO • UI simulation only – no real payments or sensitive data.</span>
+    </div>
+
+    <header class="dash-topbar">
+      <div class="dash-left">
+        <div class="dash-logo-pill">
+          <img src="assets/img/pay54-logo.svg" alt="PAY54" class="dash-logo" />
+        </div>
+        <div class="dash-brand-block">
+          <span class="dash-brand">PAY54</span>
+          <span class="dash-sub">Hybrid Money • NG ↔ Global</span>
+        </div>
+      </div>
+      <div class="dash-right">
+        <div class="currency-pill">
+          <button class="chip chip-small" data-wallet="NGN">NGN</button>
+          <button class="chip chip-small" data-wallet="USD">USD</button>
+          <button class="chip chip-small" data-wallet="GBP">GBP</button>
+        </div>
+        <div class="profile-pill">
+          <div class="avatar">P</div>
+          <div class="profile-text">
+            <span class="profile-name" id="lblUserName">Prem Wallet</span>
+            <small class="profile-meta">PAY54 demo profile</small>
+          </div>
+          <button class="profile-menu-btn" id="btnLogout" title="Logout">⎋</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="dash-main">
+      <!-- LEFT -->
+      <section class="col-left">
+        <article class="card balance-card">
+          <div class="card-header-row mb-12">
+            <div>
+              <span class="label">Total balance</span>
+              <h1 class="balance-amount" id="lblBalance">₦ 540,000.00</h1>
+            </div>
+            <div class="balance-chip">
+              <span id="lblWalletName">NGN Wallet</span>
+              <small id="lblWalletId">••• 540</small>
+            </div>
+          </div>
+          <p class="balance-sub">
+            FX wallets: <span id="lblFxSummary">USD • GBP</span>
+          </p>
+          <div class="quick-actions">
+            <button class="btn-soft" data-modal="add">Add money</button>
+            <button class="btn-soft" data-modal="withdraw">Withdraw</button>
+          </div>
+          <div class="quick-stats">
+            <div>
+              <span class="stat-label">Today</span>
+              <span class="stat-value" id="lblTodayChange">+ ₦32,500</span>
+            </div>
+            <div>
+              <span class="stat-label">This month</span>
+              <span class="stat-value" id="lblMonthChange">+ ₦210,000</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2 class="card-title">Money moves</h2>
+          <div class="grid-actions">
+            <button class="action-tile" data-modal="send">
+              <span>Send</span>
+              <small>Wallet • Bank • Mobile money</small>
+            </button>
+            <button class="action-tile" data-modal="receive">
+              <span>Receive</span>
+              <small>Show account & PAY54 tag</small>
+            </button>
+            <button class="action-tile" data-modal="add">
+              <span>Add</span>
+              <small>Card • Bank • Agents</small>
+            </button>
+            <button class="action-tile" data-modal="withdraw">
+              <span>Withdraw</span>
+              <small>ATM • Bank • Agents</small>
+            </button>
+            <button class="action-tile" data-modal="bankTransfer">
+              <span>Bank transfer</span>
+              <small>To NG banks & wallets</small>
+            </button>
+            <button class="action-tile" data-modal="request">
+              <span>Request money</span>
+              <small>With notification list</small>
+            </button>
+            <button class="action-tile" data-modal="fx">
+              <span>FX (NGN ⇄ USD/GBP)</span>
+              <small>Cross-border rails</small>
+            </button>
+            <button class="action-tile" data-modal="aiRisk">
+              <span>AI Risk Watch</span>
+              <small>Flag risky activity</small>
+            </button>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2 class="card-title">Services</h2>
+          <div class="grid-services">
+            <button class="service-tile" data-modal="crossBorderFx">Cross-border FX</button>
+            <button class="service-tile" data-modal="savingsPot">Savings pots</button>
+            <button class="service-tile" data-modal="bills">Pay bills (Airtime/Data/Power/TV)</button>
+            <button class="service-tile" data-modal="cards">Virtual & linked cards</button>
+            <button class="service-tile" data-modal="checkout">PAY54 Smart Checkout</button>
+            <button class="service-tile" data-modal="shop">Shop on the Fly</button>
+            <button class="service-tile" data-modal="invest">Investments</button>
+            <button class="service-tile" data-modal="bet">Bet funding</button>
+            <button class="service-tile" data-modal="agent">Become an Agent</button>
+          </div>
+        </article>
+      </section>
+
+      <!-- RIGHT -->
+      <section class="col-right">
+        <article class="card">
+          <div class="card-header-row">
+            <h2 class="card-title">Requests & alerts</h2>
+            <button class="link-small" id="btnClearAlerts">Clear all</button>
+          </div>
+          <ul class="feed-list" id="listRequests"></ul>
+        </article>
+
+        <article class="card">
+          <h2 class="card-title">Quick shortcuts</h2>
+          <div class="chip-column">
+            <button class="chip full" data-modal="agent">Become an Agent</button>
+            <button class="chip full" data-modal="shop">Shop on the Fly</button>
+            <button class="chip full" data-modal="savingsPot">Open Savings Pot</button>
+            <button class="chip full" data-modal="invest">Invest & Stocks</button>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header-row">
+            <h2 class="card-title">Recent transactions</h2>
+            <button class="link-small" id="btnViewAllTx">View all</button>
+          </div>
+          <ul class="txn-list" id="listTx"></ul>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal layer -->
+  <div id="modalLayer" class="modal-layer hidden" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <header class="modal-header">
+        <h3 id="modalTitle">PAY54 Action</h3>
+        <button class="modal-close" data-close>&times;</button>
+      </header>
+      <section id="modalBody" class="modal-body"></section>
+      <footer class="modal-footer">
+        <button class="btn-soft" data-close>Close</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/modal.js"></script>
+  <script src="assets/js/session.js"></script>
+  <script src="assets/js/dashboard.js"></script>
+</body>
+</html>
 
