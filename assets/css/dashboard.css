@@ -1,1 +1,415 @@
+/* ============================================================
+   PAY54 v6.7 — Premium Dashboard Styles
+   Author: CTO Assistant
+   ============================================================ */
+
+:root {
+  --bg-main: #020617;
+  --bg-card: #0f172a;
+  --bg-soft: rgba(30, 41, 59, 0.7);
+  --bg-surface: rgba(15, 23, 42, 0.85);
+  --accent: #22c55e;
+  --accent-soft: rgba(34, 197, 94, 0.15);
+  --text-main: #e2e8f0;
+  --text-soft: #94a3b8;
+  --text-muted: #64748b;
+  --border-soft: rgba(148, 163, 184, 0.25);
+  --radius-card: 18px;
+  --radius-pill: 999px;
+  --shadow-card: 0 8px 25px rgba(0, 0, 0, 0.25);
+  --shadow-soft: 0 6px 14px rgba(0, 0, 0, 0.18);
+  --tx-income: #22c55e;
+  --tx-expense: #ef4444;
+}
+
+body.dash-body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+}
+
+/* ============================================================
+   Layout
+   ============================================================ */
+
+.dash-shell {
+  max-width: 1450px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+.dash-banner {
+  text-align: center;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  background: rgba(34, 197, 94, 0.1);
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--accent);
+}
+
+/* Topbar ---------------------------------------------------- */
+
+.dash-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 10px 10px;
+  border-bottom: 1px solid var(--border-soft);
+  backdrop-filter: blur(6px);
+}
+
+.dash-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dash-logo-pill {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-pill);
+  background: radial-gradient(circle at top left, var(--accent), #065f46);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dash-logo {
+  width: 22px;
+  height: 22px;
+}
+
+.dash-brand-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-brand {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.dash-sub {
+  font-size: 0.72rem;
+  color: var(--text-soft);
+}
+
+/* Right side ------------------------------------------------ */
+
+.dash-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.currency-pill {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.chip-small {
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-soft);
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.profile-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-soft);
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-soft);
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.profile-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-name {
+  font-size: 0.88rem;
+}
+
+.profile-meta {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.profile-menu-btn {
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+  color: var(--text-soft);
+  cursor: pointer;
+}
+
+/* ============================================================
+   Main layout
+   ============================================================ */
+
+.dash-main {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 18px;
+  padding: 20px 10px;
+}
+
+/* Cards ----------------------------------------------------- */
+
+.card {
+  background: var(--bg-card);
+  padding: 16px 18px 18px;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-soft);
+  margin-bottom: 16px;
+}
+
+.card-title {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.link-small {
+  color: var(--accent);
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+/* ============================================================
+   Balance Card
+   ============================================================ */
+
+.balance-card .label {
+  font-size: 0.77rem;
+  color: var(--text-soft);
+}
+
+.balance-amount {
+  font-size: 2.2rem;
+  margin: 4px 0;
+}
+
+.balance-sub {
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  margin-top: 10px;
+  margin-bottom: 14px;
+}
+
+.balance-chip {
+  padding: 6px 12px;
+  background: rgba(34, 197, 94, 0.12);
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: var(--accent);
+  display: inline-flex;
+  flex-direction: column;
+}
+
+/* Quick actions -------------------------------------------- */
+
+.quick-actions {
+  display: flex;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.btn-soft {
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-soft);
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.btn-soft:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ============================================================
+   Grids (Money Moves + Services)
+   ============================================================ */
+
+.grid-actions,
+.grid-services {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.action-tile,
+.service-tile {
+  padding: 12px 10px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-card);
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.action-tile:hover,
+.service-tile:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.action-tile small {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  margin-top: 4px;
+}
+
+/* ============================================================
+   Right column (Requests, Shortcuts, Txns)
+   ============================================================ */
+
+.feed-list,
+.txn-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* requests */
+.feed-list li {
+  padding: 8px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 0.82rem;
+}
+
+/* transactions */
+.txn-list li {
+  padding: 8px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.84rem;
+}
+
+.tx-income {
+  color: var(--tx-income);
+}
+
+.tx-expense {
+  color: var(--tx-expense);
+}
+
+/* ============================================================
+   Chips / Shortcuts
+   ============================================================ */
+
+.chip-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chip.full {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-soft);
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+}
+
+/* ============================================================
+   Modal Layer
+   ============================================================ */
+
+.modal-layer {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.68);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+  z-index: 900;
+}
+
+.modal-layer.hidden {
+  display: none;
+}
+
+.modal-card {
+  width: 96%;
+  max-width: 420px;
+  background: var(--bg-card);
+  padding: 16px;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-card);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+}
+
+.modal-close {
+  border: none;
+  background: transparent;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: var(--text-soft);
+}
+
+/* ============================================================
+   Toasts
+   ============================================================ */
+
+.toast-container {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 999;
+}
+
+.toast {
+  padding: 10px 14px;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  border-radius: var(--radius-pill);
+  color: var(--accent);
+  font-size: 0.82rem;
+  backdrop-filter: blur(2px);
+}
 
