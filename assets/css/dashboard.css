@@ -4,30 +4,35 @@
    ------------------------------------------------------------
    Controls:
      - Layout grid
-     - Premium dark theme
+     - Premium dark & light themes
      - Cards, grids, panels
      - Money Moves
      - Services
      - Right column feeds
-     - Modals, toasts
+     - Modals & toasts
      - Mobile responsiveness
-     - Light/Dark toggle
+     - Light/Dark toggle system
    ============================================================ */
+
 
 /* ------------------------------------------------------------
    ROOT VARIABLES
 ------------------------------------------------------------ */
+/* ============================================================
+   PAY54 v6.7.1 • Dashboard Styles (Hybrid Premium)
+   ============================================================ */
+
 :root {
   --bg-main: #020617;
   --bg-card: #0f172a;
-  --bg-soft: rgba(15, 23, 42, 0.85);
+  --bg-soft: rgba(15, 23, 42, 0.9);
 
   --text-main: #e5e7eb;
   --text-soft: #cbd5f5;
   --text-muted: #94a3b8;
 
   --accent: #22c55e;
-  --accent-soft: rgba(34, 197, 94, 0.15);
+  --accent-soft: rgba(34, 197, 94, 0.18);
 
   --radius-card: 18px;
   --radius-pill: 999px;
@@ -41,11 +46,11 @@
   --tx-expense: #ef4444;
 }
 
-/* Light theme: optional toggle */
+/* Light theme override */
 body.theme-light {
   --bg-main: #f8fafc;
   --bg-card: #ffffff;
-  --bg-soft: #e2e8f0;
+  --bg-soft: #e5e7eb;
 
   --text-main: #0f172a;
   --text-soft: #4b5563;
@@ -54,12 +59,8 @@ body.theme-light {
   --border-soft: rgba(148, 163, 184, 0.55);
 }
 
-/* ------------------------------------------------------------
-   BODY + GLOBAL LAYOUT
------------------------------------------------------------- */
 body.dash-body {
   margin: 0;
-  padding: 0;
   background: var(--bg-main);
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   color: var(--text-main);
@@ -67,24 +68,20 @@ body.dash-body {
 
 .dash-shell {
   max-width: 1450px;
-  margin: 0 auto 45px;
+  margin: 0 auto 40px;
 }
 
-/* ------------------------------------------------------------
-   BANNER
------------------------------------------------------------- */
+/* Banner */
 .dash-banner {
   text-align: center;
   background: #022c22;
   padding: 6px 10px;
   font-size: 0.78rem;
   color: var(--accent);
-  border-bottom: 1px solid rgba(34, 197, 94, 0.15);
+  border-bottom: 1px solid rgba(34, 197, 94, 0.2);
 }
 
-/* ------------------------------------------------------------
-   TOPBAR (logo, currency, profile)
------------------------------------------------------------- */
+/* Topbar */
 .dash-topbar {
   display: flex;
   justify-content: space-between;
@@ -92,7 +89,13 @@ body.dash-body {
   padding: 14px 12px;
 }
 
-/* Glowing PAY54 Icon (matches v6.5 look EXACTLY) */
+.dash-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Glowing PAY54 icon (v6.5 style) */
 .dash-logo-pill {
   width: 42px;
   height: 42px;
@@ -106,36 +109,33 @@ body.dash-body {
   font-size: 0.85rem;
   color: #e5e7eb;
 }
-.dash-logo-pill img {
-  display: none;
-}
-.dash-logo-pill::before {
-  content: "P54";
-}
+.dash-logo-pill img { display: none; }
+.dash-logo-pill::before { content: "P54"; }
 
-/* Brand texts */
-.dash-brand-block { margin-left: 10px; }
 .dash-brand {
   font-weight: 700;
+  letter-spacing: 0.05em;
   font-size: 1rem;
-  letter-spacing: 0.04em;
 }
 .dash-sub {
   font-size: 0.78rem;
   color: var(--text-muted);
 }
 
-.dash-left {
+/* Right side */
+.dash-right {
   display: flex;
   align-items: center;
+  gap: 14px;
 }
 
-/* Currency switcher */
-.currency-pill {
+/* Currency & theme group */
+.currency-group {
   display: flex;
+  align-items: center;
   gap: 6px;
-  margin-right: 14px;
 }
+
 .chip-small {
   border-radius: var(--radius-pill);
   padding: 6px 12px;
@@ -144,83 +144,126 @@ body.dash-body {
   font-size: 0.75rem;
   color: var(--text-main);
   cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s;
+}
+.chip-small:hover {
+  background: rgba(15, 23, 42, 0.8);
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-1px);
 }
 
 /* Theme toggle */
 .theme-toggle {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: var(--radius-pill);
   border: 1px solid var(--border-soft);
   background: var(--bg-soft);
   color: var(--text-main);
-  margin-right: 14px;
   cursor: pointer;
+  font-size: 0.9rem;
 }
 
-/* Profile block */
+/* Profile + dropdown */
+.profile-wrapper {
+  position: relative;
+}
+
 .profile-pill {
   display: flex;
   align-items: center;
-  background: var(--bg-soft);
+  gap: 8px;
   border-radius: var(--radius-pill);
   padding: 6px 12px;
+  border: 1px solid var(--border-soft);
+  background: var(--bg-soft);
   box-shadow: var(--shadow-soft);
+  cursor: pointer;
 }
 
 .avatar {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background: #334155;
+  background: #1e293b;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  margin-right: 8px;
 }
 
 .profile-meta {
-  font-size: 0.71rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
 }
 
-.profile-menu-btn {
-  margin-left: 10px;
-  background: transparent;
-  border: none;
+.profile-caret {
+  font-size: 0.8rem;
   color: var(--text-soft);
-  font-size: 1.1rem;
-  cursor: pointer;
 }
 
-/* ------------------------------------------------------------
-   MAIN GRID
------------------------------------------------------------- */
+.profile-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-hard);
+  display: flex;
+  flex-direction: column;
+  min-width: 170px;
+  z-index: 20;
+}
+.profile-menu.hidden {
+  display: none;
+}
+.profile-menu button {
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  text-align: left;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.profile-menu button:hover {
+  background: rgba(148, 163, 184, 0.15);
+}
+
+/* Main grid using areas (controls mobile order) */
 .dash-main {
   display: grid;
-  grid-template-columns: 1.07fr 0.93fr;
-  gap: 20px;
+  grid-template-columns: 1.1fr 0.9fr;
+  grid-template-areas:
+    "balance shortcuts"
+    "money requests"
+    "services transactions";
+  gap: 18px;
   padding: 14px;
 }
 
-/* ------------------------------------------------------------
-   CARD STYLES
------------------------------------------------------------- */
+/* Cards */
 .card {
   background: var(--bg-card);
   border-radius: var(--radius-card);
   border: 1px solid var(--border-soft);
-  padding: 16px;
   box-shadow: var(--shadow-hard);
-  margin-bottom: 16px;
+  padding: 16px;
 }
 
+/* Map cards to grid areas */
+.card-balance    { grid-area: balance; }
+.card-shortcuts  { grid-area: shortcuts; }
+.card-money      { grid-area: money; }
+.card-services   { grid-area: services; }
+.card-transactions { grid-area: transactions; }
+.card-requests   { grid-area: requests; }
+
 .card-title {
-  margin: 0 0 12px;
+  margin: 0 0 10px;
   font-size: 1.12rem;
   font-weight: 600;
-  color: var(--text-main);
 }
 
 .card-header-row {
@@ -229,53 +272,156 @@ body.dash-body {
   align-items: center;
 }
 
-/* ------------------------------------------------------------
-   BALANCE CARD
------------------------------------------------------------- */
+/* Balance section */
 .balance-amount {
-  margin: 0;
-  font-size: 2.4rem;
+  margin: 4px 0 0;
+  font-size: 2.3rem;
   font-weight: 700;
 }
-
 .balance-chip {
   background: var(--bg-soft);
-  border: 1px solid var(--border-soft);
-  padding: 6px 12px;
   border-radius: var(--radius-pill);
+  padding: 6px 12px;
+  border: 1px solid var(--border-soft);
+  font-size: 0.8rem;
+}
+.balance-sub {
   font-size: 0.82rem;
+  color: var(--text-soft);
+  margin: 10px 0 12px;
 }
 
+/* Quick actions (Add / Withdraw) */
+.quick-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+/* Buttons – pill styles */
+.btn-pill-primary,
+.btn-pill-secondary,
+.btn-pill-ghost {
+  border-radius: var(--radius-pill);
+  padding: 7px 14px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.btn-pill-primary {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #022c22;
+}
+.btn-pill-primary:hover {
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-1px);
+}
+
+.btn-pill-secondary {
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text-main);
+  border: 1px solid var(--border-soft);
+}
+.btn-pill-secondary:hover {
+  background: rgba(15, 23, 42, 0.7);
+}
+
+/* smaller variant */
+.btn-pill-ghost.small,
+.btn-pill-secondary.small {
+  padding: 6px 12px;
+  font-size: 0.78rem;
+}
+
+.btn-pill-ghost {
+  background: transparent;
+  color: var(--text-soft);
+  border: 1px solid var(--border-soft);
+}
+.btn-pill-ghost:hover {
+  background: rgba(15, 23, 42, 0.7);
+}
+
+/* Stats row */
+.quick-stats {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 12px;
+  font-size: 0.8rem;
+}
+.stat-label {
+  display: block;
+  color: var(--text-muted);
+}
+.stat-value {
+  font-weight: 500;
+}
+
+/* KYC / account / tag / share */
 .balance-meta {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
   gap: 10px;
-  margin-top: 14px;
+  margin-top: 8px;
+  font-size: 0.8rem;
 }
-
 .meta-label {
   display: block;
-  font-size: 0.72rem;
   color: var(--text-muted);
+  font-size: 0.72rem;
 }
 .meta-value {
   font-size: 0.82rem;
-  color: var(--text-main);
 }
-
 .share-chip {
   border-radius: var(--radius-pill);
   padding: 6px 12px;
-  background: rgba(255,255,255,0.04);
   border: 1px solid var(--border-soft);
+  background: rgba(255, 255, 255, 0.04);
   color: var(--accent);
-  font-size: 0.77rem;
+  font-size: 0.78rem;
   cursor: pointer;
 }
 
-/* ------------------------------------------------------------
-   GRID: Money Moves
------------------------------------------------------------- */
+/* Trust strip */
+.trust-strip {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(148, 163, 184, 0.35);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* Quick shortcuts */
+.chip-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.chip.full {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-soft);
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text-main);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s, box-shadow 0.15s;
+}
+.chip.full:hover {
+  background: rgba(15, 23, 42, 0.75);
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-1px);
+}
+
+/* Money moves grid */
 .grid-actions {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -284,72 +430,90 @@ body.dash-body {
 
 .action-tile {
   background: var(--bg-soft);
-  border: 1px solid var(--border-soft);
   border-radius: var(--radius-card);
-  padding: 12px;
-  text-align: left;
+  border: 1px solid var(--border-soft);
+  padding: 11px;
   cursor: pointer;
-  color: var(--text-main);
-  font-size: 0.88rem;
-  line-height: 1.2;
+  font-size: 0.86rem;
+  transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
 }
 .action-tile small {
   display: block;
   color: var(--text-muted);
   margin-top: 4px;
 }
+.action-tile:hover {
+  background: rgba(15, 23, 42, 0.8);
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-1px);
+}
 
-/* ------------------------------------------------------------
-   GRID: Services
------------------------------------------------------------- */
+/* Services grid */
 .grid-services {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
-
 .service-tile {
   background: var(--bg-soft);
-  border: 1px solid var(--border-soft);
   border-radius: var(--radius-card);
-  padding: 12px;
-  font-size: 0.88rem;
-  cursor: pointer;
+  border: 1px solid var(--border-soft);
+  padding: 10px;
+  font-size: 0.86rem;
   text-align: center;
-  color: var(--text-main);
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+}
+.service-tile:hover {
+  background: rgba(15, 23, 42, 0.8);
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-1px);
 }
 
-/* ------------------------------------------------------------
-   RIGHT COLUMN: Requests & Tx
------------------------------------------------------------- */
+/* Requests & Tx lists */
 .feed-list,
 .txn-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-
 .feed-list li,
 .txn-list li {
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border-soft);
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
   font-size: 0.86rem;
   display: flex;
   justify-content: space-between;
 }
-
 .tx-income { color: var(--tx-income); }
 .tx-expense { color: var(--tx-expense); }
 
-.link-small {
-  color: var(--text-muted);
-  font-size: 0.78rem;
-  cursor: pointer;
+/* Toasts */
+.toast-container {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 40;
+}
+.toast {
+  background: #111827;
+  color: var(--text-main);
+  padding: 10px 14px;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-soft);
+  font-size: 0.82rem;
+  animation: toastIn 0.28s ease-out;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* ------------------------------------------------------------
-   MODALS
------------------------------------------------------------- */
+/* Modal layer */
 .modal-layer {
   position: fixed;
   inset: 0;
@@ -358,36 +522,33 @@ body.dash-body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 14px;
+  padding: 16px;
+  z-index: 30;
 }
 .modal-layer.hidden {
   display: none;
 }
-
 .modal-card {
   background: var(--bg-card);
-  border-radius: var(--radius-card);
+  border-radius: 18px;
   border: 1px solid var(--border-soft);
-  width: 100%;
-  max-width: 420px;
   box-shadow: var(--shadow-hard);
+  max-width: 420px;
+  width: 100%;
 }
-
-.modal-header {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--border-soft);
-  display: flex;
-  justify-content: space-between;
-  font-weight: 600;
-}
-.modal-body {
-  padding: 16px;
-  font-size: 0.9rem;
-}
+.modal-header,
 .modal-footer {
   padding: 12px 16px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.modal-footer {
+  border-bottom: none;
   border-top: 1px solid var(--border-soft);
   text-align: right;
+}
+.modal-body {
+  padding: 14px 16px;
+  font-size: 0.9rem;
 }
 .modal-close {
   background: transparent;
@@ -398,44 +559,35 @@ body.dash-body {
 }
 
 /* ------------------------------------------------------------
-   TOASTS
------------------------------------------------------------- */
-.toast-container {
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.toast {
-  background: #111827;
-  color: var(--text-main);
-  padding: 10px 16px;
-  border-radius: var(--radius-card);
-  border: 1px solid var(--border-soft);
-  box-shadow: var(--shadow-soft);
-  font-size: 0.82rem;
-  animation: fadeIn 0.3s ease-out;
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ------------------------------------------------------------
-   MOBILE RESPONSIVENESS
+   RESPONSIVE
 ------------------------------------------------------------ */
 @media (max-width: 900px) {
-  .dash-main {
-    grid-template-columns: minmax(0,1fr);
+  .dash-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
-  .col-right { order: -1; }
-}
 
-@media (max-width: 640px) {
-  .dash-topbar { flex-direction: column; align-items: flex-start; }
-  .grid-actions { grid-template-columns: repeat(2, minmax(0,1fr)); }
-  .grid-services { grid-template-columns: repeat(2, minmax(0,1fr)); }
-  .balance-meta { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .dash-main {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "balance"
+      "shortcuts"
+      "money"
+      "services"
+      "transactions"
+      "requests";
+  }
+
+  .grid-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-services {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .balance-meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
