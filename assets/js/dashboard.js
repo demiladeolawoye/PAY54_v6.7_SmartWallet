@@ -1,11 +1,13 @@
 /* ============================================================
-   PAY54 Smart Wallet Engine • v6.7.1 (Production Demo)
+   PAY54 Smart Wallet Engine • v6.7.2 (Production Demo)
    Controls:
    - Wallet switching
    - Modals
    - FX (NGN ⇄ USD/GBP/EUR)
    - Requests & alerts
    - Transactions
+   - Investments & portfolio
+   - PAY54 Smart Checkout (demo)
    - Services + shortcuts
    - Profile menu (settings/support/logout)
    ============================================================ */
@@ -16,6 +18,7 @@
 
   const STORAGE_KEY = "pay54_demo_user";
   const THEME_KEY = "pay54_theme";
+  const PORTFOLIO_KEY = "pay54_portfolio";
 
   /* ------------------------------------------------------------
      USER PROFILE
@@ -49,7 +52,6 @@
     if (tagEl) tagEl.textContent = tag;
     if (accEl) accEl.textContent = "1234567890";
 
-    // stash for settings modal
     window.__pay54Profile = { name, email, phone, tag };
   }
 
@@ -69,10 +71,7 @@
   }
 
   function toggleTheme() {
-    const isLight = !document.body.classList.contains("theme-light")
-      ? true
-      : false;
-
+    const isLight = !document.body.classList.contains("theme-light");
     localStorage.setItem(THEME_KEY, isLight ? "light" : "dark");
     applyTheme();
   }
@@ -82,7 +81,7 @@
     ?.addEventListener("click", toggleTheme);
 
   /* ------------------------------------------------------------
-     WALLET BALANCE + DATA
+     WALLET DATA
   ------------------------------------------------------------ */
 
   let currentWallet = "NGN";
@@ -235,18 +234,83 @@
     });
 
   /* ------------------------------------------------------------
-     MODAL TEMPLATES
+     PORTFOLIO (Investments & Stocks)
   ------------------------------------------------------------ */
+  function loadPortfolio() {
+    try {
+      return JSON.parse(localStorage.getItem(PORTFOLIO_KEY)) || [];
+    } catch {
+      return [];
+    }
+  }
+
+  function savePortfolio(portfolio) {
+    localStorage.setItem(PORTFOLIO_KEY, JSON.stringify(portfolio));
+  }
+
+  let portfolio = loadPortfolio();
+
+  function portfolioListHtml() {
+    if (!portfolio.length) {
+      return `<p style="font-size:0.85rem;">You don’t have any investments yet (demo).</p>`;
+    }
+
+    const rate = 1500; // NGN per 1 USD (mock)
+    const feePct = 0.015;
+
+    return `
+      <ul>
+        ${portfolio
+          .map((p) => {
+            const usdValue = p.amountUSD;
+            const gross = usdValue * rate;
+            const fee = gross * feePct;
+            const net = gross - fee;
+            return `<li style="margin-bottom:6px;font-size:0.85rem;">
+              <strong>${p.name}</strong> – $${usdValue.toFixed(
+                2
+              )} ≈ ${u.formatCurrency(
+              net,
+              "NGN"
+            )} (after ${u.formatCurrency(fee, "NGN")} FX fee)
+            </li>`;
+          })
+          .join("")}
+      </ul>
+    `;
+  }
+
+  /* ------------------------------------------------------------
+     RECEIPT HELPER
+  ------------------------------------------------------------ */
+  function showReceipt(title, detailsHtml) {
+    modal.openModal(
+      title,
+      `
+      <div>
+        ${detailsHtml}
+        <p style="margin-top:10px;font-size:0.8rem;color:#94a3b8;">
+          Demo only – no real payment or investment is processed.
+        </p>
+      </div>
+    `
+    );
+  }
+
+  /* ------------------------------------------------------------
+     MODAL CONTENT TEMPLATES
+  ------------------------------------------------------------ */
+
   function tplSendP54() {
     return `
       <p>Send money from your PAY54 wallet to another PAY54 user instantly.</p>
       <div class="form-group">
         <label>Recipient PAY54 Tag</label>
-        <input placeholder="@username" />
+        <input placeholder="@username54" />
       </div>
       <div class="form-group">
         <label>Amount</label>
-        <input type="number" placeholder="1000" />
+        <input type="number" id="sendAmount" placeholder="1000" />
       </div>
       <button class="btn-pill-primary" id="btnSendDemo">Send (demo)</button>
     `;
@@ -268,6 +332,7 @@
   }
 
   const modalMap = {
+    /* MONEY MOVES */
     sendP54: tplSendP54,
     receive: tplReceive,
 
@@ -275,7 +340,7 @@
       <p>Add money with card, bank transfer or agents.</p>
       <div class="form-group">
         <label>Amount</label>
-        <input type="number" placeholder="5000" />
+        <input type="number" id="topupAmount" placeholder="5000" />
       </div>
       <button class="btn-pill-primary" id="btnTopupDemo">Confirm top-up (demo)</button>
     `,
@@ -284,7 +349,7 @@
       <p>Withdraw to bank or via agents.</p>
       <div class="form-group">
         <label>Amount</label>
-        <input type="number" placeholder="2000" />
+        <input type="number" id="withdrawAmount" placeholder="2000" />
       </div>
       <button class="btn-pill-secondary" id="btnWithdrawDemo">Create withdrawal (demo)</button>
     `,
@@ -293,15 +358,15 @@
       <p>Send to NG banks & wallets.</p>
       <div class="form-group">
         <label>Bank</label>
-        <input placeholder="Demo Bank" />
+        <input id="bankName" placeholder="Demo Bank" />
       </div>
       <div class="form-group">
         <label>Account number</label>
-        <input placeholder="0123456789" />
+        <input id="bankAccount" placeholder="0123456789" />
       </div>
       <div class="form-group">
         <label>Amount</label>
-        <input type="number" placeholder="5000" />
+        <input type="number" id="bankAmount" placeholder="5000" />
       </div>
       <button class="btn-pill-secondary" id="btnBankTransferDemo">Send (demo)</button>
     `,
@@ -310,15 +375,16 @@
       <p>Request money from another PAY54 user.</p>
       <div class="form-group">
         <label>From (PAY54 Tag)</label>
-        <input placeholder="@friend" />
+        <input id="reqTag" placeholder="@friend54" />
       </div>
       <div class="form-group">
         <label>Amount</label>
-        <input type="number" placeholder="10000" />
+        <input type="number" id="reqAmount" placeholder="10000" />
       </div>
       <button class="btn-pill-primary" id="btnRequestDemo">Create request (demo)</button>
     `,
 
+    /* SERVICES */
     crossBorderFx: () => `
       <p>Cross-border FX rails for NGN ⇄ USD/GBP/EUR.</p>
       <p>Demo rate: NGN 1,000 = USD 1.</p>
@@ -329,11 +395,11 @@
       <p>Create a savings pot.</p>
       <div class="form-group">
         <label>Pot name</label>
-        <input placeholder="School fees" />
+        <input id="potName" placeholder="School fees" />
       </div>
       <div class="form-group">
         <label>Target amount</label>
-        <input type="number" placeholder="100000" />
+        <input type="number" id="potTarget" placeholder="100000" />
       </div>
       <button class="btn-pill-primary" id="btnSavingsDemo">Create pot (demo)</button>
     `,
@@ -342,11 +408,11 @@
       <p>Pay airtime, data, electricity & TV.</p>
       <div class="form-group">
         <label>Service</label>
-        <input placeholder="Airtime – MTN" />
+        <input id="billService" placeholder="Airtime – MTN" />
       </div>
       <div class="form-group">
         <label>Amount</label>
-        <input type="number" placeholder="2000" />
+        <input type="number" id="billAmount" placeholder="2000" />
       </div>
       <button class="btn-pill-secondary" id="btnBillsDemo">Pay bill (demo)</button>
     `,
@@ -357,44 +423,92 @@
     `,
 
     checkout: () => `
-      <p>PAY54 Smart Checkout lets merchants accept one-tap payments.</p>
-      <p>In production, this connects to your PAY54 balance or linked cards.</p>
+      <p>PAY54 Smart Checkout works like PayPal or Apple Pay on partner e-commerce sites.</p>
+      <p>When you choose PAY54 at checkout, a payment request appears here for approval.</p>
+      <hr/>
+      <p><strong>Demo merchant payment</strong></p>
+      <p>Merchant: <strong>Demo Store</strong></p>
+      <p>Item: PAY54 Hoodie</p>
+      <p>Total: <strong>${currentWallet === "NGN"
+        ? u.formatCurrency(18000, "NGN")
+        : currentWallet === "USD"
+        ? u.formatCurrency(25, "USD")
+        : u.formatCurrency(20, "GBP")}</strong></p>
+      <button class="btn-pill-primary" id="btnCheckoutApprove">Approve payment (demo)</button>
+      <button class="btn-pill-secondary" id="btnCheckoutDecline" style="margin-left:6px;">Decline</button>
     `,
 
     shop: () => `
       <p>Shop on the Fly with PAY54 at partner apps & websites.</p>
-      <p>This demo shows only the UX concept – no real purchases are made.</p>
+      <ul>
+        <li>🚕 Taxi – Bolt / Uber (demo)</li>
+        <li>🛒 Shopping – Jumia</li>
+        <li>🍔 Food – JustEat</li>
+        <li>🎟 Tickets – Event partners</li>
+      </ul>
+      <p>In production, tapping a partner would open their app or site with PAY54 as the payment option.</p>
     `,
 
     invest: () => `
-      <p>Investments & stocks inside PAY54.</p>
+      <p><strong>Explore investments</strong></p>
       <ul>
-        <li>🌱 Conservative – 6–8% target (demo)</li>
-        <li>🚀 Growth – 12–15% target (demo)</li>
+        <li>📈 PAY54 Tech Fund – global tech exposure</li>
+        <li>🏙 Lagos Real Estate Fractionals</li>
+        <li>🌍 PAY54 Growth Index – diversified basket</li>
       </ul>
-      <button class="btn-pill-primary" id="btnInvestDemo">Simulate invest (demo)</button>
+      <button class="btn-pill-primary" id="btnInvestDemo">Buy $50 PAY54 Tech Fund (demo)</button>
+      <hr/>
+      <p><strong>My portfolio (demo)</strong></p>
+      ${portfolioListHtml()}
     `,
 
     bet: () => `
       <p>Fund betting wallets responsibly.</p>
-      <p>In production, spend caps and controls would live here.</p>
+      <div class="form-group">
+        <label>Betting wallet ID</label>
+        <input id="betId" placeholder="BET12345" />
+      </div>
+      <div class="form-group">
+        <label>Amount</label>
+        <input type="number" id="betAmount" placeholder="2000" />
+      </div>
+      <div class="form-group" style="font-size:0.8rem;">
+        <label><input type="checkbox" id="betAdult" /> I confirm I am 18+ and accept responsible gambling terms.</label>
+      </div>
+      <button class="btn-pill-secondary" id="btnBetDemo">Fund betting wallet (demo)</button>
+      <p style="margin-top:8px;font-size:0.78rem;color:#f97316;">
+        Bet responsibly. PAY54 does not encourage gambling – this is a UX demo only.
+      </p>
     `,
 
     aiRisk: () => `
       <p>AI Risk Watch scans your activity for unusual behaviour.</p>
-      <p>In production it would flag risky transactions and log device changes.</p>
+      <ul>
+        <li>New device login from Lagos – <strong>Review</strong></li>
+        <li>High-value transfer flagged – <strong>Pending</strong></li>
+      </ul>
+      <button class="btn-pill-secondary" id="btnRiskResolve">Mark alerts as resolved (demo)</button>
     `,
 
     agent: () => `
       <p>Become a PAY54 Agent.</p>
       <div class="form-group">
-        <label>Business name</label>
-        <input placeholder="Demo Agent" />
+        <label>Full name</label>
+        <input id="agentName" placeholder="Demo Agent" />
       </div>
       <div class="form-group">
-        <label>Contact phone</label>
-        <input placeholder="+234..." />
+        <label>Business name</label>
+        <input id="agentBiz" placeholder="Demo Biz Ltd" />
       </div>
+      <div class="form-group">
+        <label>NIN</label>
+        <input id="agentNin" placeholder="1234-5678-9012" />
+      </div>
+      <div class="form-group">
+        <label>Location</label>
+        <input id="agentLocation" placeholder="Lagos, Nigeria" />
+      </div>
+      <p style="font-size:0.8rem;">Selfie capture: <strong>Image captured (demo only)</strong></p>
       <button class="btn-pill-primary" id="btnAgentDemo">Submit application (demo)</button>
     `,
   };
@@ -414,19 +528,38 @@
 
     modal.openModal("PAY54 • " + key.toUpperCase(), html);
 
-    // wire up special buttons inside the new modal
     const layer = document.getElementById("modalLayer");
 
-    // FX convert
+    /* MONEY MOVES ACTIONS */
+
+    // FX convert demo
     layer.querySelector("#btnFxConvert")?.addEventListener("click", () => {
       balances.NGN -= 50000;
       balances.USD += 50;
       updateBalance();
-      u.showToast("FX conversion complete (demo)");
-      modal.closeModal();
+      transactions.push({
+        type: "out",
+        amount: 50000,
+        desc: "FX → USD",
+        currency: "NGN",
+      });
+      transactions.push({
+        type: "in",
+        amount: 50,
+        desc: "FX from NGN",
+        currency: "USD",
+      });
+      loadTransactions();
+      showReceipt(
+        "FX conversion (demo)",
+        `<p>Converted ${u.formatCurrency(
+          50000,
+          "NGN"
+        )} to ${u.formatCurrency(50, "USD")}.</p>`
+      );
     });
 
-    // copy details for Receive
+    // Receive – copy details
     layer.querySelector("#btnCopyDetails")?.addEventListener("click", () => {
       const acc = document.getElementById("lblAccountNo")?.textContent || "";
       const tag = document.getElementById("lblTag")?.textContent || "";
@@ -434,65 +567,267 @@
       u.showToast("Details copied (demo)");
     });
 
-    // Add money (demo)
+    // Add money
     layer.querySelector("#btnTopupDemo")?.addEventListener("click", () => {
-      u.showToast("Top-up created (demo only)");
-      modal.closeModal();
+      const amt = Number(
+        layer.querySelector("#topupAmount")?.value || "5000"
+      );
+      if (amt > 0) {
+        balances[currentWallet] += amt;
+        transactions.push({
+          type: "in",
+          amount: amt,
+          desc: "Wallet top-up",
+          currency: currentWallet,
+        });
+        updateBalance();
+        loadTransactions();
+        showReceipt(
+          "Top-up successful (demo)",
+          `<p>Added ${u.formatCurrency(
+            amt,
+            currentWallet
+          )} to your ${currentWallet} wallet.</p>`
+        );
+      }
     });
 
-    // Withdraw demo
+    // Withdraw
     layer.querySelector("#btnWithdrawDemo")?.addEventListener("click", () => {
-      u.showToast("Withdrawal created (demo only)");
-      modal.closeModal();
+      const amt = Number(
+        layer.querySelector("#withdrawAmount")?.value || "2000"
+      );
+      if (amt > 0) {
+        balances[currentWallet] -= amt;
+        transactions.push({
+          type: "out",
+          amount: amt,
+          desc: "Withdrawal to bank/agent",
+          currency: currentWallet,
+        });
+        updateBalance();
+        loadTransactions();
+        showReceipt(
+          "Withdrawal created (demo)",
+          `<p>Withdrawal of ${u.formatCurrency(
+            amt,
+            currentWallet
+          )} has been created in demo mode.</p>`
+        );
+      }
     });
 
-    // Bank transfer demo
-    layer.querySelector("#btnBankTransferDemo")?.addEventListener("click", () => {
-      u.showToast("Bank transfer queued (demo)");
-      modal.closeModal();
-    });
+    // Bank transfer
+    layer
+      .querySelector("#btnBankTransferDemo")
+      ?.addEventListener("click", () => {
+        const bank = layer.querySelector("#bankName")?.value || "Demo Bank";
+        const acc =
+          layer.querySelector("#bankAccount")?.value || "0123456789";
+        const amt = Number(
+          layer.querySelector("#bankAmount")?.value || "5000"
+        );
+        if (amt > 0) {
+          balances[currentWallet] -= amt;
+          transactions.push({
+            type: "out",
+            amount: amt,
+            desc: `Transfer to ${bank} (${acc})`,
+            currency: currentWallet,
+          });
+          updateBalance();
+          loadTransactions();
+          showReceipt(
+            "Bank transfer (demo)",
+            `<p>Transfer of ${u.formatCurrency(
+              amt,
+              currentWallet
+            )} to ${bank} (${acc}) created in demo.</p>`
+          );
+        }
+      });
 
-    // Request money demo – adds to Requests feed
+    // Request money
     layer.querySelector("#btnRequestDemo")?.addEventListener("click", () => {
-      requests.unshift("You requested money (demo)");
+      const tag = layer.querySelector("#reqTag")?.value || "@friend54";
+      const amt = Number(
+        layer.querySelector("#reqAmount")?.value || "10000"
+      );
+      requests.unshift(`You requested ${u.formatCurrency(amt, "NGN")} from ${tag}`);
       loadRequests();
       u.showToast("Request created (demo)");
-      modal.closeModal();
+      showReceipt(
+        "Request created (demo)",
+        `<p>Requested ${u.formatCurrency(
+          amt,
+          "NGN"
+        )} from ${tag}. This will not send a real notification in demo mode.</p>`
+      );
     });
 
-    // Savings pot demo
+    // Send PAY54 → PAY54
+    layer.querySelector("#btnSendDemo")?.addEventListener("click", () => {
+      const amt = Number(
+        layer.querySelector("#sendAmount")?.value || "1000"
+      );
+      if (amt > 0) {
+        balances[currentWallet] -= amt;
+        transactions.push({
+          type: "out",
+          amount: amt,
+          desc: "Sent to PAY54 user (demo)",
+          currency: currentWallet,
+        });
+        updateBalance();
+        loadTransactions();
+        showReceipt(
+          "Payment sent (demo)",
+          `<p>Sent ${u.formatCurrency(
+            amt,
+            currentWallet
+          )} to another PAY54 user (demo only).</p>`
+        );
+      }
+    });
+
+    /* SERVICES */
+
+    // Savings pot
     layer.querySelector("#btnSavingsDemo")?.addEventListener("click", () => {
-      requests.unshift("Savings pot created (demo)");
+      const name = layer.querySelector("#potName")?.value || "Savings pot";
+      const target = Number(
+        layer.querySelector("#potTarget")?.value || "100000"
+      );
+      requests.unshift(`Savings pot "${name}" created (target ${u.formatCurrency(
+        target,
+        "NGN"
+      )})`);
       loadRequests();
-      u.showToast("Savings pot created (demo)");
-      modal.closeModal();
+      showReceipt(
+        "Savings pot created (demo)",
+        `<p>Pot <strong>${name}</strong> created with target ${u.formatCurrency(
+          target,
+          "NGN"
+        )}.</p>`
+      );
     });
 
-    // Bills demo
+    // Bills
     layer.querySelector("#btnBillsDemo")?.addEventListener("click", () => {
-      u.showToast("Bill paid (demo)");
-      modal.closeModal();
+      const svc = layer.querySelector("#billService")?.value || "Airtime";
+      const amt = Number(
+        layer.querySelector("#billAmount")?.value || "2000"
+      );
+      balances[currentWallet] -= amt;
+      transactions.push({
+        type: "out",
+        amount: amt,
+        desc: `Bill payment – ${svc}`,
+        currency: currentWallet,
+      });
+      updateBalance();
+      loadTransactions();
+      showReceipt(
+        "Bill paid (demo)",
+        `<p>Paid ${u.formatCurrency(
+          amt,
+          currentWallet
+        )} for ${svc} in demo mode.</p>`
+      );
     });
 
     // Invest demo
     layer.querySelector("#btnInvestDemo")?.addEventListener("click", () => {
-      u.showToast("Investment simulated (demo)");
-      modal.closeModal();
+      const item = { name: "PAY54 Tech Fund", amountUSD: 50 };
+      portfolio.push(item);
+      savePortfolio(portfolio);
+      showReceipt(
+        "Investment simulated (demo)",
+        `<p>Invested $${item.amountUSD.toFixed(
+          2
+        )} into the PAY54 Tech Fund (demo).</p>`
+      );
     });
 
-    // Agent application demo
+    // Agent application
     layer.querySelector("#btnAgentDemo")?.addEventListener("click", () => {
-      requests.unshift("Agent application received (demo)");
+      const name = layer.querySelector("#agentName")?.value || "Demo Agent";
+      requests.unshift(`Agent application received from ${name} (demo)`);
       loadRequests();
-      u.showToast("Agent application submitted (demo)");
-      modal.closeModal();
+      showReceipt(
+        "Agent application submitted (demo)",
+        `<p>Application for <strong>${name}</strong> recorded in demo.</p>`
+      );
     });
 
-    // Send demo
-    layer.querySelector("#btnSendDemo")?.addEventListener("click", () => {
-      u.showToast("Payment sent (demo)");
-      modal.closeModal();
+    // AI Risk Watch
+    layer.querySelector("#btnRiskResolve")?.addEventListener("click", () => {
+      requests.unshift("AI Risk alerts marked as resolved (demo)");
+      loadRequests();
+      u.showToast("Risk alerts resolved (demo)");
     });
+
+    // Bet funding
+    layer.querySelector("#btnBetDemo")?.addEventListener("click", () => {
+      const amt = Number(
+        layer.querySelector("#betAmount")?.value || "2000"
+      );
+      const adult = layer.querySelector("#betAdult")?.checked;
+      if (!adult) {
+        u.showToast("You must confirm you are 18+ (demo)");
+        return;
+      }
+      balances[currentWallet] -= amt;
+      transactions.push({
+        type: "out",
+        amount: amt,
+        desc: "Bet wallet funding (demo)",
+        currency: currentWallet,
+      });
+      updateBalance();
+      loadTransactions();
+      showReceipt(
+        "Bet wallet funded (demo)",
+        `<p>Funded betting wallet with ${u.formatCurrency(
+          amt,
+          currentWallet
+        )} in demo mode.</p>`
+      );
+    });
+
+    // Smart Checkout
+    layer
+      .querySelector("#btnCheckoutApprove")
+      ?.addEventListener("click", () => {
+        const amt =
+          currentWallet === "NGN"
+            ? 18000
+            : currentWallet === "USD"
+            ? 25
+            : 20;
+        balances[currentWallet] -= amt;
+        transactions.push({
+          type: "out",
+          amount: amt,
+          desc: "PAY54 Smart Checkout – Demo Store",
+          currency: currentWallet,
+        });
+        updateBalance();
+        loadTransactions();
+        showReceipt(
+          "Checkout approved (demo)",
+          `<p>Paid ${u.formatCurrency(
+            amt,
+            currentWallet
+          )} to Demo Store via PAY54 Smart Checkout (demo).</p>`
+        );
+      });
+
+    layer
+      .querySelector("#btnCheckoutDecline")
+      ?.addEventListener("click", () => {
+        u.showToast("Checkout declined (demo)");
+      });
   }
 
   document
