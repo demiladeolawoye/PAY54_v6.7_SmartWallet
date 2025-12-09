@@ -1,5 +1,5 @@
 /* ============================================================
-   PAY54 v6.7.1 • Dashboard Stylesheet
+   PAY54 v6.7.2 • Dashboard Stylesheet
    Hybrid Edition (v6.5 branding + v6.7 premium spacing)
    ------------------------------------------------------------
    Controls:
@@ -12,14 +12,6 @@
      - Modals & toasts
      - Mobile responsiveness
      - Light/Dark toggle system
-   ============================================================ */
-
-
-/* ------------------------------------------------------------
-   ROOT VARIABLES
------------------------------------------------------------- */
-/* ============================================================
-   PAY54 v6.7.1 • Dashboard Styles (Hybrid Premium)
    ============================================================ */
 
 :root {
@@ -253,12 +245,12 @@ body.dash-body {
 }
 
 /* Map cards to grid areas */
-.card-balance    { grid-area: balance; }
-.card-shortcuts  { grid-area: shortcuts; }
-.card-money      { grid-area: money; }
-.card-services   { grid-area: services; }
+.card-balance      { grid-area: balance; }
+.card-shortcuts    { grid-area: shortcuts; }
+.card-money        { grid-area: money; }
+.card-services     { grid-area: services; }
 .card-transactions { grid-area: transactions; }
-.card-requests   { grid-area: requests; }
+.card-requests     { grid-area: requests; }
 
 .card-title {
   margin: 0 0 10px;
@@ -435,6 +427,8 @@ body.dash-body {
   padding: 11px;
   cursor: pointer;
   font-size: 0.86rem;
+  color: var(--text-main);
+  min-height: 72px;
   transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
 }
 .action-tile small {
@@ -462,6 +456,12 @@ body.dash-body {
   font-size: 0.86rem;
   text-align: center;
   cursor: pointer;
+  color: var(--text-main);
+  min-height: 72px;              /* keeps Pay Bills text inside on mobile */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-wrap: balance;
   transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
 }
 .service-tile:hover {
@@ -556,6 +556,26 @@ body.dash-body {
   font-size: 1.4rem;
   color: var(--text-soft);
   cursor: pointer;
+}
+
+/* Simple form styling inside modals */
+.form-group {
+  margin: 8px 0;
+}
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+.form-group input {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border-soft);
+  background: rgba(15, 23, 42, 0.7);
+  color: var(--text-main);
+  font-size: 0.85rem;
 }
 
 /* ------------------------------------------------------------
