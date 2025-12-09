@@ -35,10 +35,11 @@
           <button class="chip chip-small" data-wallet="USD">USD</button>
           <button class="chip chip-small" data-wallet="GBP">GBP</button>
         </div>
+        <button class="theme-toggle" id="btnThemeToggle">☾</button>
         <div class="profile-pill">
-          <div class="avatar">P</div>
+          <div class="avatar" id="avatarInitial">P</div>
           <div class="profile-text">
-            <span class="profile-name" id="lblUserName">Prem Wallet</span>
+            <span class="profile-name" id="lblUserName">PAY54 User</span>
             <small class="profile-meta">PAY54 demo profile</small>
           </div>
           <button class="profile-menu-btn" id="btnLogout" title="Logout">⎋</button>
@@ -63,10 +64,12 @@
           <p class="balance-sub">
             FX wallets: <span id="lblFxSummary">USD • GBP</span>
           </p>
+
           <div class="quick-actions">
             <button class="btn-soft" data-modal="add">Add money</button>
             <button class="btn-soft" data-modal="withdraw">Withdraw</button>
           </div>
+
           <div class="quick-stats">
             <div>
               <span class="stat-label">Today</span>
@@ -77,26 +80,43 @@
               <span class="stat-value" id="lblMonthChange">+ ₦210,000</span>
             </div>
           </div>
+
+          <div class="balance-meta">
+            <div>
+              <span class="meta-label">KYC</span>
+              <span class="meta-value" id="lblKycStatus">Verified</span>
+            </div>
+            <div>
+              <span class="meta-label">Account</span>
+              <span class="meta-value" id="lblAccountNo">1234567890</span>
+            </div>
+            <div>
+              <span class="meta-label">PAY54 Tag</span>
+              <span class="meta-value" id="lblTag">@pay54demo</span>
+            </div>
+            <button class="share-chip" id="btnShareDetails">Share</button>
+          </div>
         </article>
 
+        <!-- Money moves -->
         <article class="card">
           <h2 class="card-title">Money moves</h2>
           <div class="grid-actions">
-            <button class="action-tile" data-modal="send">
-              <span>Send</span>
-              <small>Wallet • Bank • Mobile money</small>
+            <button class="action-tile" data-modal="sendP54">
+              <span>Send PAY54 → PAY54</span>
+              <small>Instant P2P transfers</small>
             </button>
             <button class="action-tile" data-modal="receive">
               <span>Receive</span>
-              <small>Show account & PAY54 tag</small>
+              <small>Show account, tag & QR</small>
             </button>
             <button class="action-tile" data-modal="add">
-              <span>Add</span>
+              <span>Add money</span>
               <small>Card • Bank • Agents</small>
             </button>
             <button class="action-tile" data-modal="withdraw">
               <span>Withdraw</span>
-              <small>ATM • Bank • Agents</small>
+              <small>Bank • Agents</small>
             </button>
             <button class="action-tile" data-modal="bankTransfer">
               <span>Bank transfer</span>
@@ -106,29 +126,23 @@
               <span>Request money</span>
               <small>With notification list</small>
             </button>
-            <button class="action-tile" data-modal="fx">
-              <span>FX (NGN ⇄ USD/GBP)</span>
-              <small>Cross-border rails</small>
-            </button>
-            <button class="action-tile" data-modal="aiRisk">
-              <span>AI Risk Watch</span>
-              <small>Flag risky activity</small>
-            </button>
           </div>
         </article>
 
+        <!-- Services -->
         <article class="card">
           <h2 class="card-title">Services</h2>
           <div class="grid-services">
             <button class="service-tile" data-modal="crossBorderFx">Cross-border FX</button>
-            <button class="service-tile" data-modal="savingsPot">Savings pots</button>
+            <button class="service-tile" data-modal="savings">Savings</button>
             <button class="service-tile" data-modal="bills">Pay bills (Airtime/Data/Power/TV)</button>
             <button class="service-tile" data-modal="cards">Virtual & linked cards</button>
             <button class="service-tile" data-modal="checkout">PAY54 Smart Checkout</button>
             <button class="service-tile" data-modal="shop">Shop on the Fly</button>
-            <button class="service-tile" data-modal="invest">Investments</button>
+            <button class="service-tile" data-modal="invest">Investments & stocks</button>
             <button class="service-tile" data-modal="bet">Bet funding</button>
-            <button class="service-tile" data-modal="agent">Become an Agent</button>
+            <button class="service-tile" data-modal="aiRisk">AI Risk Watch</button>
+            <button class="service-tile" data-modal="agent">Become an agent</button>
           </div>
         </article>
       </section>
@@ -148,7 +162,7 @@
           <div class="chip-column">
             <button class="chip full" data-modal="agent">Become an Agent</button>
             <button class="chip full" data-modal="shop">Shop on the Fly</button>
-            <button class="chip full" data-modal="savingsPot">Open Savings Pot</button>
+            <button class="chip full" data-modal="savings">Open Savings Pot</button>
             <button class="chip full" data-modal="invest">Invest & Stocks</button>
           </div>
         </article>
@@ -178,7 +192,6 @@
     </div>
   </div>
 
-  <!-- Toasts -->
   <div id="toastContainer" class="toast-container"></div>
 
   <script src="assets/js/utils.js"></script>
@@ -187,4 +200,3 @@
   <script src="assets/js/dashboard.js"></script>
 </body>
 </html>
-
