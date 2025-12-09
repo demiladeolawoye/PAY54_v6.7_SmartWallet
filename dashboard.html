@@ -16,9 +16,10 @@
 <body class="dash-body">
   <div class="dash-shell">
     <div class="dash-banner">
-      <span>PAY54 DEMO • UI simulation only – no real payments or sensitive data.</span>
+      PAY54 DEMO • UI simulation only – no real payments or sensitive data.
     </div>
 
+    <!-- TOP BAR -->
     <header class="dash-topbar">
       <div class="dash-left">
         <div class="dash-logo-pill">
@@ -29,156 +30,203 @@
           <span class="dash-sub">Hybrid Money • NG ↔ Global</span>
         </div>
       </div>
+
       <div class="dash-right">
-        <div class="currency-pill">
+        <div class="currency-group">
           <button class="chip chip-small" data-wallet="NGN">NGN</button>
           <button class="chip chip-small" data-wallet="USD">USD</button>
           <button class="chip chip-small" data-wallet="GBP">GBP</button>
+          <button class="theme-toggle" id="btnThemeToggle">☾</button>
         </div>
-        <button class="theme-toggle" id="btnThemeToggle">☾</button>
-        <div class="profile-pill">
-          <div class="avatar" id="avatarInitial">P</div>
-          <div class="profile-text">
-            <span class="profile-name" id="lblUserName">PAY54 User</span>
-            <small class="profile-meta">PAY54 demo profile</small>
+
+        <!-- Profile pill + dropdown menu -->
+        <div class="profile-wrapper">
+          <button class="profile-pill" id="profilePill" type="button">
+            <div class="avatar" id="avatarInitial">P</div>
+            <div class="profile-text">
+              <span class="profile-name" id="lblUserName">PAY54 User</span>
+              <small class="profile-meta">PAY54 demo profile</small>
+            </div>
+            <span class="profile-caret">▾</span>
+          </button>
+
+          <div class="profile-menu hidden" id="profileMenu">
+            <button type="button" data-menu="settings">Settings</button>
+            <button type="button" data-menu="support">Support Centre</button>
+            <button type="button" data-menu="logout">Logout</button>
           </div>
-          <button class="profile-menu-btn" id="btnLogout" title="Logout">⎋</button>
         </div>
       </div>
     </header>
 
+    <!-- MAIN GRID: we use grid-areas so we can control MOBILE order -->
     <main class="dash-main">
-      <!-- LEFT -->
-      <section class="col-left">
-        <article class="card balance-card">
-          <div class="card-header-row mb-12">
-            <div>
-              <span class="label">Total balance</span>
-              <h1 class="balance-amount" id="lblBalance">₦ 540,000.00</h1>
-            </div>
-            <div class="balance-chip">
-              <span id="lblWalletName">NGN Wallet</span>
-              <small id="lblWalletId">••• 540</small>
-            </div>
+      <!-- BALANCE (Area: balance) -->
+      <article class="card card-balance">
+        <div class="card-header-row">
+          <div>
+            <span class="label">Total balance</span>
+            <h1 class="balance-amount" id="lblBalance">₦ 540,000.00</h1>
           </div>
-          <p class="balance-sub">
-            FX wallets: <span id="lblFxSummary">USD • GBP</span>
-          </p>
-
-          <div class="quick-actions">
-            <button class="btn-soft" data-modal="add">Add money</button>
-            <button class="btn-soft" data-modal="withdraw">Withdraw</button>
+          <div class="balance-chip">
+            <span id="lblWalletName">NGN Wallet</span>
+            <small id="lblWalletId">••• 540</small>
           </div>
+        </div>
 
-          <div class="quick-stats">
-            <div>
-              <span class="stat-label">Today</span>
-              <span class="stat-value" id="lblTodayChange">+ ₦32,500</span>
-            </div>
-            <div>
-              <span class="stat-label">This month</span>
-              <span class="stat-value" id="lblMonthChange">+ ₦210,000</span>
-            </div>
+        <p class="balance-sub">
+          FX wallets: <span id="lblFxSummary">USD • GBP</span>
+        </p>
+
+        <div class="quick-actions">
+          <button class="btn-pill-primary" data-modal="add">Add money</button>
+          <button class="btn-pill-secondary" data-modal="withdraw">Withdraw</button>
+        </div>
+
+        <div class="quick-stats">
+          <div>
+            <span class="stat-label">Today</span>
+            <span class="stat-value" id="lblTodayChange">+ ₦32,500</span>
           </div>
-
-          <div class="balance-meta">
-            <div>
-              <span class="meta-label">KYC</span>
-              <span class="meta-value" id="lblKycStatus">Verified</span>
-            </div>
-            <div>
-              <span class="meta-label">Account</span>
-              <span class="meta-value" id="lblAccountNo">1234567890</span>
-            </div>
-            <div>
-              <span class="meta-label">PAY54 Tag</span>
-              <span class="meta-value" id="lblTag">@pay54demo</span>
-            </div>
-            <button class="share-chip" id="btnShareDetails">Share</button>
+          <div>
+            <span class="stat-label">This month</span>
+            <span class="stat-value" id="lblMonthChange">+ ₦210,000</span>
           </div>
-        </article>
+        </div>
 
-        <!-- Money moves -->
-        <article class="card">
-          <h2 class="card-title">Money moves</h2>
-          <div class="grid-actions">
-            <button class="action-tile" data-modal="sendP54">
-              <span>Send PAY54 → PAY54</span>
-              <small>Instant P2P transfers</small>
-            </button>
-            <button class="action-tile" data-modal="receive">
-              <span>Receive</span>
-              <small>Show account, tag & QR</small>
-            </button>
-            <button class="action-tile" data-modal="add">
-              <span>Add money</span>
-              <small>Card • Bank • Agents</small>
-            </button>
-            <button class="action-tile" data-modal="withdraw">
-              <span>Withdraw</span>
-              <small>Bank • Agents</small>
-            </button>
-            <button class="action-tile" data-modal="bankTransfer">
-              <span>Bank transfer</span>
-              <small>To NG banks & wallets</small>
-            </button>
-            <button class="action-tile" data-modal="request">
-              <span>Request money</span>
-              <small>With notification list</small>
-            </button>
+        <!-- KYC / Account / Tag / Share -->
+        <div class="balance-meta">
+          <div>
+            <span class="meta-label">KYC</span>
+            <span class="meta-value" id="lblKycStatus">Verified (demo)</span>
           </div>
-        </article>
-
-        <!-- Services -->
-        <article class="card">
-          <h2 class="card-title">Services</h2>
-          <div class="grid-services">
-            <button class="service-tile" data-modal="crossBorderFx">Cross-border FX</button>
-            <button class="service-tile" data-modal="savings">Savings</button>
-            <button class="service-tile" data-modal="bills">Pay bills (Airtime/Data/Power/TV)</button>
-            <button class="service-tile" data-modal="cards">Virtual & linked cards</button>
-            <button class="service-tile" data-modal="checkout">PAY54 Smart Checkout</button>
-            <button class="service-tile" data-modal="shop">Shop on the Fly</button>
-            <button class="service-tile" data-modal="invest">Investments & stocks</button>
-            <button class="service-tile" data-modal="bet">Bet funding</button>
-            <button class="service-tile" data-modal="aiRisk">AI Risk Watch</button>
-            <button class="service-tile" data-modal="agent">Become an agent</button>
+          <div>
+            <span class="meta-label">Account</span>
+            <span class="meta-value" id="lblAccountNo">1234567890</span>
           </div>
-        </article>
-      </section>
-
-      <!-- RIGHT -->
-      <section class="col-right">
-        <article class="card">
-          <div class="card-header-row">
-            <h2 class="card-title">Requests & alerts</h2>
-            <button class="link-small" id="btnClearAlerts">Clear all</button>
+          <div>
+            <span class="meta-label">PAY54 Tag</span>
+            <span class="meta-value" id="lblTag">@pay54demo</span>
           </div>
-          <ul class="feed-list" id="listRequests"></ul>
-        </article>
+          <button class="share-chip" id="btnShareDetails" type="button">
+            Share
+          </button>
+        </div>
 
-        <article class="card">
+        <!-- Security / trust strip -->
+        <div class="trust-strip">
+          <span>🔐 Secure PIN + device (demo)</span>
+          <span>🧊 Data stored locally only</span>
+          <span>🛡 Designed for future PCI-ready rails</span>
+        </div>
+      </article>
+
+      <!-- QUICK SHORTCUTS (Area: shortcuts) -->
+      <article class="card card-shortcuts">
+        <div class="card-header-row">
           <h2 class="card-title">Quick shortcuts</h2>
-          <div class="chip-column">
-            <button class="chip full" data-modal="agent">Become an Agent</button>
-            <button class="chip full" data-modal="shop">Shop on the Fly</button>
-            <button class="chip full" data-modal="savings">Open Savings Pot</button>
-            <button class="chip full" data-modal="invest">Invest & Stocks</button>
-          </div>
-        </article>
+        </div>
+        <div class="chip-column">
+          <button class="chip full" data-modal="agent">Become an Agent</button>
+          <button class="chip full" data-modal="shop">Shop on the Fly</button>
+          <button class="chip full" data-modal="savings">Open Savings Pot</button>
+          <button class="chip full" data-modal="invest">Invest & Stocks</button>
+        </div>
+      </article>
 
-        <article class="card">
-          <div class="card-header-row">
-            <h2 class="card-title">Recent transactions</h2>
-            <button class="link-small" id="btnViewAllTx">View all</button>
-          </div>
-          <ul class="txn-list" id="listTx"></ul>
-        </article>
-      </section>
+      <!-- MONEY MOVES (Area: money) -->
+      <article class="card card-money">
+        <h2 class="card-title">Money moves</h2>
+        <div class="grid-actions">
+          <button class="action-tile" data-modal="sendP54">
+            <span class="tile-title">Send PAY54 → PAY54</span>
+            <small>Instant P2P transfers</small>
+          </button>
+          <button class="action-tile" data-modal="receive">
+            <span class="tile-title">Receive</span>
+            <small>Show account, tag & QR</small>
+          </button>
+          <button class="action-tile" data-modal="add">
+            <span class="tile-title">Add money</span>
+            <small>Card • Bank • Agents</small>
+          </button>
+          <button class="action-tile" data-modal="withdraw">
+            <span class="tile-title">Withdraw</span>
+            <small>Bank • Agents</small>
+          </button>
+          <button class="action-tile" data-modal="bankTransfer">
+            <span class="tile-title">Bank transfer</span>
+            <small>To NG banks & wallets</small>
+          </button>
+          <button class="action-tile" data-modal="request">
+            <span class="tile-title">Request money</span>
+            <small>With notification list</small>
+          </button>
+        </div>
+      </article>
+
+      <!-- SERVICES (Area: services) -->
+      <article class="card card-services">
+        <h2 class="card-title">Services</h2>
+        <div class="grid-services">
+          <button class="service-tile" data-modal="crossBorderFx">
+            Cross-border FX
+          </button>
+          <button class="service-tile" data-modal="savings">
+            Savings
+          </button>
+          <button class="service-tile" data-modal="bills">
+            Pay bills (Airtime/Data/Power/TV)
+          </button>
+          <button class="service-tile" data-modal="cards">
+            Virtual & linked cards
+          </button>
+          <button class="service-tile" data-modal="checkout">
+            PAY54 Smart Checkout
+          </button>
+          <button class="service-tile" data-modal="shop">
+            Shop on the Fly
+          </button>
+          <button class="service-tile" data-modal="invest">
+            Investments & stocks
+          </button>
+          <button class="service-tile" data-modal="bet">
+            Bet funding
+          </button>
+          <button class="service-tile" data-modal="aiRisk">
+            AI Risk Watch
+          </button>
+          <button class="service-tile" data-modal="agent">
+            Become an Agent
+          </button>
+        </div>
+      </article>
+
+      <!-- RECENT TRANSACTIONS (Area: tx) -->
+      <article class="card card-transactions">
+        <div class="card-header-row">
+          <h2 class="card-title">Recent transactions</h2>
+          <button class="btn-pill-ghost small" id="btnViewAllTx" type="button">
+            View all
+          </button>
+        </div>
+        <ul class="txn-list" id="listTx"></ul>
+      </article>
+
+      <!-- REQUESTS & ALERTS (Area: requests) -->
+      <article class="card card-requests">
+        <div class="card-header-row">
+          <h2 class="card-title">Requests & alerts</h2>
+          <button class="btn-pill-ghost small" id="btnClearAlerts" type="button">
+            Clear all
+          </button>
+        </div>
+        <ul class="feed-list" id="listRequests"></ul>
+      </article>
     </main>
   </div>
 
-  <!-- Modal layer -->
+  <!-- MODAL LAYER -->
   <div id="modalLayer" class="modal-layer hidden" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true">
       <header class="modal-header">
@@ -187,11 +235,12 @@
       </header>
       <section id="modalBody" class="modal-body"></section>
       <footer class="modal-footer">
-        <button class="btn-soft" data-close>Close</button>
+        <button class="btn-pill-secondary" data-close type="button">Close</button>
       </footer>
     </div>
   </div>
 
+  <!-- TOASTS -->
   <div id="toastContainer" class="toast-container"></div>
 
   <script src="assets/js/utils.js"></script>
