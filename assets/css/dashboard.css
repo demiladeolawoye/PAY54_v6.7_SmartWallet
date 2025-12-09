@@ -1,25 +1,30 @@
-/* ============================================================
-   PAY54 v6.7 — Premium Dashboard Styles
-   Author: CTO Assistant
-   ============================================================ */
-
 :root {
   --bg-main: #020617;
   --bg-card: #0f172a;
-  --bg-soft: rgba(30, 41, 59, 0.7);
-  --bg-surface: rgba(15, 23, 42, 0.85);
+  --bg-soft: rgba(15, 23, 42, 0.9);
   --accent: #22c55e;
   --accent-soft: rgba(34, 197, 94, 0.15);
-  --text-main: #e2e8f0;
-  --text-soft: #94a3b8;
-  --text-muted: #64748b;
-  --border-soft: rgba(148, 163, 184, 0.25);
+  --text-main: #e5e7eb;
+  --text-soft: #cbd5f5;
+  --text-muted: #94a3b8;
+  --border-soft: rgba(148, 163, 184, 0.35);
   --radius-card: 18px;
   --radius-pill: 999px;
-  --shadow-card: 0 8px 25px rgba(0, 0, 0, 0.25);
-  --shadow-soft: 0 6px 14px rgba(0, 0, 0, 0.18);
+  --shadow-card: 0 8px 25px rgba(0, 0, 0, 0.4);
+  --shadow-soft: 0 6px 16px rgba(0, 0, 0, 0.35);
   --tx-income: #22c55e;
   --tx-expense: #ef4444;
+}
+
+/* Light theme overrides */
+body.theme-light {
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-soft: #e5e7eb;
+  --text-main: #0f172a;
+  --text-soft: #4b5563;
+  --text-muted: #6b7280;
+  --border-soft: rgba(148, 163, 184, 0.45);
 }
 
 body.dash-body {
@@ -30,386 +35,77 @@ body.dash-body {
   font-family: system-ui, -apple-system, Segoe UI, sans-serif;
 }
 
-/* ============================================================
-   Layout
-   ============================================================ */
-
 .dash-shell {
   max-width: 1450px;
-  margin: 0 auto;
-  padding-bottom: 40px;
+  margin: 0 auto 40px;
 }
 
-.dash-banner {
-  text-align: center;
-  padding: 6px 10px;
-  font-size: 0.75rem;
-  background: rgba(34, 197, 94, 0.1);
-  border-bottom: 1px solid var(--border-soft);
-  color: var(--accent);
-}
-
-/* Topbar ---------------------------------------------------- */
-
-.dash-topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 10px 10px;
-  border-bottom: 1px solid var(--border-soft);
-  backdrop-filter: blur(6px);
-}
-
-.dash-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
+/* Glowing PAY54 pill */
 .dash-logo-pill {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: var(--radius-pill);
-  background: radial-gradient(circle at top left, var(--accent), #065f46);
+  background: radial-gradient(circle at 30% 10%, #ffffff, #1d4ed8 35%, #020617 100%);
+  box-shadow: 0 0 18px rgba(59, 130, 246, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #e5e7eb;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+.dash-logo-pill img {
+  display: none;
+}
+.dash-logo-pill::before {
+  content: "P54";
 }
 
-.dash-logo {
-  width: 22px;
-  height: 22px;
-}
-
-.dash-brand-block {
-  display: flex;
-  flex-direction: column;
-}
-
-.dash-brand {
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-}
-
-.dash-sub {
-  font-size: 0.72rem;
-  color: var(--text-soft);
-}
-
-/* Right side ------------------------------------------------ */
-
-.dash-right {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.currency-pill {
-  display: inline-flex;
-  gap: 6px;
-}
-
-.chip-small {
-  padding: 5px 12px;
-  border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border-soft);
-  color: var(--text-main);
-  cursor: pointer;
-}
-
-.profile-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--bg-soft);
-  padding: 6px 12px;
+/* Theme toggle */
+.theme-toggle {
   border-radius: var(--radius-pill);
   border: 1px solid var(--border-soft);
-}
-
-.avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: var(--radius-pill);
-  background: var(--accent-soft);
-  color: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-}
-
-.profile-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.profile-name {
-  font-size: 0.88rem;
-}
-
-.profile-meta {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-}
-
-.profile-menu-btn {
-  border: none;
-  background: transparent;
-  font-size: 1.1rem;
+  background: rgba(15, 23, 42, 0.7);
   color: var(--text-soft);
+  width: 34px;
+  height: 34px;
+  font-size: 0.9rem;
   cursor: pointer;
 }
+body.theme-light .theme-toggle {
+  background: #ffffff;
+}
 
-/* ============================================================
-   Main layout
-   ============================================================ */
-
+/* Main grid – updated for mobile */
 .dash-main {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: 1.1fr 0.9fr;
   gap: 18px;
   padding: 20px 10px;
 }
 
-/* Cards ----------------------------------------------------- */
-
-.card {
-  background: var(--bg-card);
-  padding: 16px 18px 18px;
-  border-radius: var(--radius-card);
-  border: 1px solid var(--border-soft);
-  box-shadow: var(--shadow-soft);
-  margin-bottom: 16px;
-}
-
-.card-title {
-  margin: 0 0 12px;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.card-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.link-small {
-  color: var(--accent);
-  font-size: 0.78rem;
-  cursor: pointer;
-}
-
-/* ============================================================
-   Balance Card
-   ============================================================ */
-
-.balance-card .label {
-  font-size: 0.77rem;
-  color: var(--text-soft);
-}
-
-.balance-amount {
-  font-size: 2.2rem;
-  margin: 4px 0;
-}
-
-.balance-sub {
-  font-size: 0.8rem;
-  color: var(--text-soft);
-  margin-top: 10px;
-  margin-bottom: 14px;
-}
-
-.balance-chip {
-  padding: 6px 12px;
-  background: rgba(34, 197, 94, 0.12);
-  border-radius: var(--radius-pill);
-  border: 1px solid rgba(34, 197, 94, 0.3);
-  color: var(--accent);
-  display: inline-flex;
-  flex-direction: column;
-}
-
-/* Quick actions -------------------------------------------- */
-
-.quick-actions {
-  display: flex;
-  gap: 10px;
-  margin: 14px 0;
-}
-
-.btn-soft {
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--border-soft);
-  color: var(--text-main);
-  cursor: pointer;
-}
-
-.btn-soft:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-/* ============================================================
-   Grids (Money Moves + Services)
-   ============================================================ */
-
-.grid-actions,
-.grid-services {
+/* Balance meta (KYC, account, tag, share) */
+.balance-meta {
   display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  gap: 8px;
+  margin-top: 10px;
+  align-items: center;
 }
-
-.action-tile,
-.service-tile {
-  padding: 12px 10px;
-  background: var(--bg-soft);
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius-card);
-  cursor: pointer;
-  transition: 0.15s ease;
-}
-
-.action-tile:hover,
-.service-tile:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.action-tile small {
+.meta-label {
   display: block;
-  color: var(--text-muted);
   font-size: 0.7rem;
-  margin-top: 4px;
+  color: var(--text-muted);
 }
-
-/* ============================================================
-   Right column (Requests, Shortcuts, Txns)
-   ============================================================ */
-
-.feed-list,
-.txn-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.meta-value {
+  font-size: 0.8rem;
 }
-
-/* requests */
-.feed-list li {
-  padding: 8px 4px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  font-size: 0.82rem;
-}
-
-/* transactions */
-.txn-list li {
-  padding: 8px 4px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.84rem;
-}
-
-.tx-income {
-  color: var(--tx-income);
-}
-
-.tx-expense {
-  color: var(--tx-expense);
-}
-
-/* ============================================================
-   Chips / Shortcuts
-   ============================================================ */
-
-.chip-column {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.chip.full {
-  width: 100%;
-  padding: 10px 12px;
+.share-chip {
+  padding: 6px 12px;
   border-radius: var(--radius-pill);
   border: 1px solid var(--border-soft);
-  background: rgba(255, 255, 255, 0.05);
-  cursor: pointer;
-}
-
-/* ============================================================
-   Modal Layer
-   ============================================================ */
-
-.modal-layer {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.68);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(2px);
-  z-index: 900;
-}
-
-.modal-layer.hidden {
-  display: none;
-}
-
-.modal-card {
-  width: 96%;
-  max-width: 420px;
-  background: var(--bg-card);
-  padding: 16px;
-  border-radius: var(--radius-card);
-  border: 1px solid var(--border-soft);
-  box-shadow: var(--shadow-card);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-header h3 {
-  margin: 0;
-}
-
-.modal-close {
-  border: none;
-  background: transparent;
-  font-size: 1.4rem;
-  cursor: pointer;
-  color: var(--text-soft);
-}
-
-/* ============================================================
-   Toasts
-   ============================================================ */
-
-.toast-container {
-  position: fixed;
-  right: 14px;
-  bottom: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  z-index: 999;
-}
-
-.toast {
-  padding: 10px 14px;
-  background: rgba(34, 197, 94, 0.15);
-  border: 1px solid rgba(34, 197, 94, 0.4);
-  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.04);
   color: var(--accent);
-  font-size: 0.82rem;
-  backdrop-filter: blur(2px);
+  cursor: pointer;
+  font-size: 0.76rem;
 }
-
